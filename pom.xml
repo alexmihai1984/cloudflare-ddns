@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>rocks.alexmihai</groupId>
 	<artifactId>cloudflare-ddns</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>cloudflare-ddns</name>
 	<description>DDNS for Cloudflare</description>
 	<url/>
