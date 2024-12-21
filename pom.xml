@@ -15,7 +15,7 @@
 	<description>DDNS for Cloudflare</description>
 
 	<scm>
-		<connection>scm:git:git://github.com/alexmihai1984/cloudflare-ddns</connection>
+		<connection>scm:git:git@github.com:alexmihai1984/cloudflare-ddns.git</connection>
 	</scm>
 
 	<properties>
