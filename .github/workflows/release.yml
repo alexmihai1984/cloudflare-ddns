@@ -22,6 +22,8 @@ jobs:
 
       - name: Release current version
         run: |
+          git config user.email "cicd@github.com"
+          git config user.name "CI/CD"
           mvn --batch-mode release:prepare
           export VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
           mvn -Pnative clean native:build
