@@ -1,5 +1,5 @@
-FROM amazoncorretto:21
+FROM alpine:3.21.0
 
-COPY target/*.jar app.jar
+COPY target/cloudflare-ddns .
 
-ENTRYPOINT ["java", "-Xmx512M", "-jar" ,"/app.jar"]
+ENTRYPOINT ["cloudflare-ddns", "-Xmx128M"]

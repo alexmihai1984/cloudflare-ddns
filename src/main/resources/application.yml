@@ -1,5 +1,11 @@
 spring.application.name: cloudflare-ddns
 
+logging:
+  file.name: /var/log/cloudflare-ddns/cloudflare-ddns.log
+  logback.rollingpolicy:
+    max-file-size: 100MB
+    max-history: 10
+
 spring.cloud.openfeign.okhttp.enabled: true
 
 cloudflare:
