@@ -1,4 +1,4 @@
-name: Build Project
+name: Build project
 
 on:
   push:
@@ -23,4 +23,4 @@ jobs:
           cache: maven
 
       - name: Build with Maven
-        run: mvn --batch-mode package
+        run: mvn clean verify
