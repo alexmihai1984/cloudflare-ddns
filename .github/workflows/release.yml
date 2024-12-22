@@ -31,19 +31,15 @@ jobs:
           git config user.name "CI/CD"
           echo VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed 's/-SNAPSHOT//')" >> $GITHUB_ENV
           mvn --batch-mode release:prepare
-          echo "Version: $VERSION ${VERSION}"
+
+      - name: Push jar
+        run: |
+          mvn --batch-mode release:perform
 
       - name: Build native image
         run: |
           git checkout cloudflare-ddns-${{ env.VERSION }}
           mvn -Pnative clean package native:compile-no-fork
-          ls -al ./target/*
-
-      - name: Verify native image
-        run: |
-          pwd
-          ls -l .
-          ls -l target/
 
       - name: Docker login
         uses: docker/login-action@v3
