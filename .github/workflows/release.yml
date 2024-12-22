@@ -39,7 +39,7 @@ jobs:
 
       - name: Build native image
         run: |
-          git checkout cloudflare-ddns-$VERSION
+          git checkout "cloudflare-ddns-{$VERSION}"
           mvn -Pnative clean package native:compile-no-fork
 
       - name: Login to Docker Hub
