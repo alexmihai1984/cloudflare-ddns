@@ -29,8 +29,8 @@ jobs:
         run: |
           git config user.email "cicd@github.com"
           git config user.name "CI/CD"
-          mvn --batch-mode release:prepare
           export VERSION="$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout | sed 's/-SNAPSHOT//')"
+          mvn --batch-mode release:prepare
           echo "Version: $VERSION ${VERSION}"
 
 #      - name: Push package
@@ -39,7 +39,7 @@ jobs:
 
       - name: Build native image
         run: |
-          git checkout "cloudflare-ddns-{$VERSION}"
+          git checkout cloudflare-ddns-${{ env.VERSION }}
           mvn -Pnative clean package native:compile-no-fork
 
       - name: Login to Docker Hub
