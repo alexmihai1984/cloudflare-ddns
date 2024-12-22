@@ -39,6 +39,12 @@ jobs:
           mvn -Pnative clean package native:compile-no-fork
           ls -al ./target/*
 
+      - name: Verify native image
+        run: |
+          pwd
+          ls -l .
+          ls -l target/
+
       - name: Docker login
         uses: docker/login-action@v3
         with:
