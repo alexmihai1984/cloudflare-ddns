@@ -60,6 +60,7 @@ jobs:
       - name: Docker build and push
         uses: docker/build-push-action@v6
         with:
+          context: .
           push: true
           tags: alexmihai1984/cloudflare-ddns:latest,alexmihai1984/cloudflare-ddns:${{ env.VERSION }}
           platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm64/v8
