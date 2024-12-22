@@ -1,4 +1,4 @@
-FROM alpine:3.21.0
+FROM ubuntu:25.04
 
 COPY ./target/cloudflare-ddns .
 
