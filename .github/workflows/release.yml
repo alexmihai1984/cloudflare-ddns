@@ -55,7 +55,7 @@ jobs:
         run: |
           docker run --rm --platform linux/arm64 \
             -v "$PWD:/app" -w /app \
-            ghcr.io/graalvm/jdk:ol8-java17-22.3.3 \
+            vegardit/graalvm-maven:latest-java21 \
             mvn -Pnative clean package
           mv ./target/cloudflare-ddns ./target/cloudflare-ddns-arm64
 
@@ -63,7 +63,7 @@ jobs:
         run: |
           docker run --rm --platform linux/amd64 \
             -v "$PWD:/app" -w /app \
-            ghcr.io/graalvm/jdk:ol8-java17-22.3.3 \
+            vegardit/graalvm-maven:latest-java21 \
             mvn -Pnative clean package
           mv ./target/cloudflare-ddns ./target/cloudflare-ddns-amd64
 
