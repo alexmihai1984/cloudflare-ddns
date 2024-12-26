@@ -52,14 +52,14 @@ jobs:
         run: |
           docker run --rm --platform linux/arm64 \
             -v "$PWD/target:/app" -w /app \
-            ghcr.io/graalvm/native-image-community:23.0.1-muslib \
+            ghcr.io/graalvm/graalvm-community:23.0.1-ol8-20241015 \
             native-image -cp cloudflare-ddns-${{ env.VERSION }}.jar cloudflare-ddns-arm64
 
       - name: Build native image amd64
         run: |
           docker run --rm --platform linux/amd64 \
             -v "$PWD/target:/app" -w /app \
-            ghcr.io/graalvm/native-image-community:23.0.1-muslib \
+            ghcr.io/graalvm/graalvm-community:23.0.1-ol8-20241015 \
             native-image -cp cloudflare-ddns-${{ env.VERSION }}.jar cloudflare-ddns-amd64
 
       - name: Docker build and push
