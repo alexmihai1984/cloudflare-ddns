@@ -57,7 +57,7 @@ jobs:
             -v "$PWD:/app" -w /app \
             vegardit/graalvm-maven:latest-java21 \
             mvn -Pnative clean package native:compile-no-fork
-          ll ./target/cloudflare-ddns
+          ls -al ./target/cloudflare-ddns
           chmod 777 ./target/cloudflare-ddns
           mv ./target/cloudflare-ddns ./target/cloudflare-ddns-arm64
 
@@ -67,7 +67,7 @@ jobs:
             -v "$PWD:/app" -w /app \
             vegardit/graalvm-maven:latest-java21 \
             mvn -Pnative clean package native:compile-no-fork
-          ll ./target/cloudflare-ddns
+          ls -al ./target/cloudflare-ddns
           chmod 777 ./target/cloudflare-ddns
           mv ./target/cloudflare-ddns ./target/cloudflare-ddns-amd64
 
