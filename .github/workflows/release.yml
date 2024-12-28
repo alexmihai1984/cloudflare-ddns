@@ -56,7 +56,8 @@ jobs:
           docker run --rm --platform linux/arm64 \
             -v "$PWD:/app" -w /app \
             vegardit/graalvm-maven:latest-java21 \
-            bash -c "mvn -Pnative clean package native:compile-no-fork"
+            mvn -Pnative clean package native:compile-no-fork
+          ll ./target/cloudflare-ddns
           chmod 777 ./target/cloudflare-ddns
           mv ./target/cloudflare-ddns ./target/cloudflare-ddns-arm64
 
@@ -65,7 +66,8 @@ jobs:
           docker run --rm --platform linux/amd64 \
             -v "$PWD:/app" -w /app \
             vegardit/graalvm-maven:latest-java21 \
-            bash -c "mvn -Pnative clean package native:compile-no-fork"
+            mvn -Pnative clean package native:compile-no-fork
+          ll ./target/cloudflare-ddns
           chmod 777 ./target/cloudflare-ddns
           mv ./target/cloudflare-ddns ./target/cloudflare-ddns-amd64
 
