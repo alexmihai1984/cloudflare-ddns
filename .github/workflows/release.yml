@@ -51,13 +51,21 @@ jobs:
       - name: Docker set up buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build native image arm64
-        run: |
-          touch ./target/cloudflare-ddns-arm64
-          ls -al ./target/cloudflare-ddns-arm64
+#      - name: Build native image arm64
+#        run: |
+#          docker run --rm --platform linux/arm64 \
+#            -v "$PWD:/app" -w /app \
+#            vegardit/graalvm-maven:latest-java21 \
+#            mvn -Pnative clean package native:compile-no-fork -Dos.arch=arm64
+#          touch ./target/cloudflare-ddns-arm64
+#          ls -al ./target/cloudflare-ddns-arm64
 
       - name: Build native image amd64
         run: |
+          docker run --rm --platform linux/amd64 \
+            -v "$PWD:/app" -w /app \
+            vegardit/graalvm-maven:latest-java21 \
+            mvn -Pnative clean package native:compile-no-fork -Dos.arch=amd64
           touch ./target/cloudflare-ddns-amd64
           ls -al ./target/cloudflare-ddns-amd64
 
@@ -67,4 +75,4 @@ jobs:
           context: .
           push: true
           tags: alexmihai1984/cloudflare-ddns:latest,alexmihai1984/cloudflare-ddns:${{ env.VERSION }}
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64 #,linux/arm64
