@@ -51,23 +51,23 @@ jobs:
       - name: Docker set up buildx
         uses: docker/setup-buildx-action@v3
 
-#      - name: Build native image arm64
-#        run: |
-#          docker run --rm --platform linux/arm64 \
-#            -v "$PWD:/app" -w /app \
-#            vegardit/graalvm-maven:latest-java21 \
-#            mvn -Pnative clean package native:compile-no-fork -Dos.arch=arm64
-#          ls -al ./target/cloudflare-ddns-arm64
-
       - name: Build native image amd64
         run: |
           docker run --rm --platform linux/amd64 \
             -v "$PWD:/app" -w /app \
             vegardit/graalvm-maven:latest-java21 \
             mvn -Pnative clean package native:compile-no-fork -Dos.arch=amd64
-          pwd
-          ls -al .
           ls -al ./target/cloudflare-ddns-amd64
+          cp ./target/cloudflare-ddns-amd64 ./cloudflare-ddns-amd64
+
+      - name: Build native image arm64
+        run: |
+          docker run --rm --platform linux/arm64 \
+            -v "$PWD:/app" -w /app \
+            vegardit/graalvm-maven:latest-java21 \
+            mvn -Pnative clean package native:compile-no-fork -Dos.arch=arm64
+          ls -al ./target/cloudflare-ddns-arm64
+          cp ./target/cloudflare-ddns-arm64 ./cloudflare-ddns-arm64
 
       - name: Docker build and push
         uses: docker/build-push-action@v6
@@ -75,4 +75,4 @@ jobs:
           context: .
           push: true
           tags: alexmihai1984/cloudflare-ddns:latest,alexmihai1984/cloudflare-ddns:${{ env.VERSION }}
-          platforms: linux/amd64 #,linux/arm64
+          platforms: linux/amd64,linux/arm64
