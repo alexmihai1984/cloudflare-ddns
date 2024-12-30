@@ -57,7 +57,6 @@ jobs:
 #            -v "$PWD:/app" -w /app \
 #            vegardit/graalvm-maven:latest-java21 \
 #            mvn -Pnative clean package native:compile-no-fork -Dos.arch=arm64
-#          touch ./target/cloudflare-ddns-arm64
 #          ls -al ./target/cloudflare-ddns-arm64
 
       - name: Build native image amd64
@@ -66,7 +65,8 @@ jobs:
             -v "$PWD:/app" -w /app \
             vegardit/graalvm-maven:latest-java21 \
             mvn -Pnative clean package native:compile-no-fork -Dos.arch=amd64
-          touch ./target/cloudflare-ddns-amd64
+          pwd
+          ls -al .
           ls -al ./target/cloudflare-ddns-amd64
 
       - name: Docker build and push
