@@ -9,13 +9,13 @@
   </parent>
   <groupId>rocks.alexmihai</groupId>
   <artifactId>cloudflare-ddns</artifactId>
-  <version>3.0.0-SNAPSHOT</version>
+  <version>3.0.0</version>
   <name>cloudflare-ddns</name>
   <description>DDNS for Cloudflare</description>
 
   <scm>
     <connection>scm:git:https://github.com/alexmihai1984/cloudflare-ddns.git</connection>
-    <tag>HEAD</tag>
+    <tag>cloudflare-ddns-3.0.0</tag>
   </scm>
 
   <properties>
