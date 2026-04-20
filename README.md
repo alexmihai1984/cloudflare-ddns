@@ -11,8 +11,8 @@ Technically, what it does is:
 
 - it runs a scheduled task every 60s (this is configurable, but I consider this a 
 sensible default)
-- it queries https://1.1.1.1/cdn-cgi/trace or https://1.0.0.1/cdn-cgi/trace (as fallback) 
-to get the public IP
+- it queries 5 endpoints to build a consensus of the public IP: https://checkip.amazonaws.com, https://icanhazip.com, 
+https://api.ipify.org, https://1.1.1.1/cdn-cgi/trace and https://1.0.0.1/cdn-cgi/trace
 - for each configured Cloudflare zone, it queries the Cloudflare API for that zone's 
 DNS records (https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-list-dns-records)
 - for each record of type 'A' matching a configured domain/subdomain, if the DNS record 
@@ -137,7 +137,8 @@ networks:
 
 ## Standalone
 
-You either download the jar file from the Github Packages or build it from sources. You will need JDK 21 to build it:
+You either download the jar file from the GitHub Packages or build it from sources. If you want to build it, you will 
+need JDK 21:
 
 ```shell
 mvn clean install

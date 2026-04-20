@@ -4,17 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import rocks.alexmihai.cloudflare_ddns.client.CloudflareApiFeignClient;
-import rocks.alexmihai.cloudflare_ddns.client.CloudflareDnsBackupTraceFeignClient;
-import rocks.alexmihai.cloudflare_ddns.client.CloudflareDnsTraceFeignClient;
 import rocks.alexmihai.cloudflare_ddns.client.model.CloudflareDnsResult;
 import rocks.alexmihai.cloudflare_ddns.client.model.DnsRecordUpdate;
 import rocks.alexmihai.cloudflare_ddns.properties.CloudflareProperties;
-import rocks.alexmihai.cloudflare_ddns.properties.CloudflareZone;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Properties;
-import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -23,11 +15,10 @@ public class CloudflareService {
 
     private final CloudflareProperties cloudflareProperties;
     private final CloudflareApiFeignClient cloudflareApiFeignClient;
-    private final CloudflareDnsTraceFeignClient cloudflareDnsTraceFeignClient;
-    private final CloudflareDnsBackupTraceFeignClient cloudflareDnsBackupTraceFeignClient;
+    private final IpConsensusFetcher ipConsensusFetcher;
 
-    void updateIp() throws Exception {
-        var ip = retrievePublicIp();
+    void updateIp() {
+        var ip = ipConsensusFetcher.fetchIp();
         log.info("Determined public IP is '{}'", ip);
 
         for (var zone : cloudflareProperties.zones()) {
@@ -35,7 +26,7 @@ public class CloudflareService {
         }
     }
 
-    private void updateZone(CloudflareZone zone, String ip) {
+    private void updateZone(CloudflareProperties.CloudflareZone zone, String ip) {
         var token = getAuthToken(zone);
 
         var apiResponse = cloudflareApiFeignClient.getDnsRecords(
@@ -49,7 +40,12 @@ public class CloudflareService {
         }
     }
 
-    private void updateDnsRecord(CloudflareZone zone, String ip, CloudflareDnsResult dnsRecord, String token) {
+    private void updateDnsRecord(
+            CloudflareProperties.CloudflareZone zone,
+            String ip,
+            CloudflareDnsResult dnsRecord,
+            String token
+    ) {
         if (!zone.domains().contains(dnsRecord.name())) {
             return;
         }
@@ -72,26 +68,7 @@ public class CloudflareService {
         log.info("Updated '{}' to IP '{}', Response: '{}'", dnsRecord.name(), ip, response);
     }
 
-    private String retrievePublicIp() throws IOException {
-        try {
-            return retrievePublicIp(cloudflareDnsTraceFeignClient::getTrace);
-        } catch (Exception e) {
-            log.warn("Failed to retrieve public IP from main URL", e);
-            return retrievePublicIp(cloudflareDnsBackupTraceFeignClient::getTrace);
-        }
-    }
-
-    private String retrievePublicIp(Supplier<String> traceRetriever) throws IOException {
-        String response = traceRetriever.get();
-        log.debug("Trace response: {}", response);
-
-        Properties properties = new Properties();
-        properties.load(new StringReader(response));
-
-        return properties.getProperty("ip");
-    }
-
-    private String getAuthToken(CloudflareZone zone) {
+    private String getAuthToken(CloudflareProperties.CloudflareZone zone) {
         if (zone.token() != null) {
             log.info("Using token override for zone '{}'", zone.id());
             return zone.token();

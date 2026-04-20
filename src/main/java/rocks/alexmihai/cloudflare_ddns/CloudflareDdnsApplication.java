@@ -7,21 +7,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import rocks.alexmihai.cloudflare_ddns.properties.CloudflareApi;
-import rocks.alexmihai.cloudflare_ddns.properties.CloudflareDnsTrace;
 import rocks.alexmihai.cloudflare_ddns.properties.CloudflareProperties;
-import rocks.alexmihai.cloudflare_ddns.properties.CloudflareZone;
+import rocks.alexmihai.cloudflare_ddns.properties.IpProvidersProperties;
 import rocks.alexmihai.cloudflare_ddns.service.ScheduledTaskRunner;
 
 @SpringBootApplication
 @RequiredArgsConstructor
 @EnableFeignClients
-@EnableConfigurationProperties(CloudflareProperties.class)
+@EnableConfigurationProperties({CloudflareProperties.class, IpProvidersProperties.class})
 @RegisterReflectionForBinding({
 		CloudflareProperties.class,
-		CloudflareApi.class,
-		CloudflareDnsTrace.class,
-		CloudflareZone.class
+		IpProvidersProperties.class
 })
 public class CloudflareDdnsApplication implements CommandLineRunner {
 
