@@ -16,8 +16,14 @@ public class CloudflareService {
     private final CloudflareProperties cloudflareProperties;
     private final CloudflareApiFeignClient cloudflareApiFeignClient;
     private final IpConsensusFetcher ipConsensusFetcher;
+    private final HealthcheckService healthcheckService;
 
     void updateIp() {
+        if (healthcheckService.isOk()) {
+            log.info("Healthcheck successful, not doing anything");
+            return;
+        }
+
         var ip = ipConsensusFetcher.fetchIp();
         log.info("Determined public IP is '{}'", ip);
 
