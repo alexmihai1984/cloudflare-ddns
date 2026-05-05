@@ -4,6 +4,6 @@ import feign.RequestLine;
 
 public interface IpProviderClient {
 
-    @RequestLine("GET /")
+    @RequestLine("GET")
     String get();
 }
