@@ -7,6 +7,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ImportRuntimeHints;
+import rocks.alexmihai.cloudflare_ddns.client.IpProviderRuntimeHints;
 import rocks.alexmihai.cloudflare_ddns.properties.CloudflareProperties;
 import rocks.alexmihai.cloudflare_ddns.properties.HealthcheckProperties;
 import rocks.alexmihai.cloudflare_ddns.properties.IpProvidersProperties;
@@ -25,6 +27,7 @@ import rocks.alexmihai.cloudflare_ddns.service.ScheduledTaskRunner;
 		HealthcheckProperties.class,
 		IpProvidersProperties.class
 })
+@ImportRuntimeHints(IpProviderRuntimeHints.class)
 public class CloudflareDdnsApplication implements CommandLineRunner {
 
 	private final ScheduledTaskRunner scheduledTaskRunner;
