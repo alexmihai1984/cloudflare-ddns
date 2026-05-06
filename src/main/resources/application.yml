@@ -12,10 +12,6 @@ scheduler:
   interval:
     seconds: 30
 
-healthcheck:
-  enabled: true
-  url: https://alexmihai.rocks
-
 ip-providers:
   providers:
     - name: aws
