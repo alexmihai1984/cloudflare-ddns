@@ -9,13 +9,16 @@ IPs, you will need to keep your DNS records up to date with your current public 
 You can run this project in your network, and it will keep your DNS records up to date.
 Technically, what it does is:
 
-- it runs a scheduled task every 60s (this is configurable, but I consider this a 
-sensible default)
-- it queries 5 endpoints to build a consensus of the public IP: https://checkip.amazonaws.com, https://icanhazip.com, 
-https://api.ipify.org, https://1.1.1.1/cdn-cgi/trace and https://1.0.0.1/cdn-cgi/trace
-- for each configured Cloudflare zone, it queries the Cloudflare API for that zone's 
-DNS records (https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-list-dns-records)
-- for each record of type 'A' matching a configured domain/subdomain, if the DNS record 
+1. It runs a scheduled task every 60s (this is configurable, but I consider this a 
+sensible default).
+2. You can (optionally) configure a URL that it hits as a health-check. If the URL returns status code 200 OK, DDNS 
+considers everything is in order and will skip everything else
+3. It queries 5 endpoints to build a consensus of the public IP: https://checkip.amazonaws.com, https://icanhazip.com, 
+https://api.ipify.org, https://1.1.1.1/cdn-cgi/trace and https://1.0.0.1/cdn-cgi/trace. The last 2 are from Cloudflare, 
+the other are other parties. So even if Cloudflare misbehaves, the other win if they agree.
+4. For each configured Cloudflare zone, it queries the Cloudflare API for that zone's 
+DNS records (https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-list-dns-records).
+5. For each record of type 'A' matching a configured domain/subdomain, if the DNS record 
 doesn't match the current public IP, it updates it by performing a PATCH request 
 to the Cloudflare API (https://developers.cloudflare.com/api/operations/dns-records-for-a-zone-patch-dns-record)
 
@@ -104,6 +107,48 @@ cloudflare:
       domains:
         - yourdomain.com
 ```
+
+## Health-check
+
+If you want to enable the health-check feature, you can do it by setting:
+
+```yaml
+healthcheck:
+  enabled: true
+  url: https://yourdomain.com
+  connect-timeout: 10s
+  request-timeout: 10s
+```
+
+The `connect-timeout` and `request-timeout` params are not necessary, they default to `10s`. But you can provide 
+whatever you feel is appropriate for your situation.
+
+## Environment variables
+
+Everything configurable through the `yml` file can also be configured through environment variables. It's a direct 
+1-to-1 correspondence, but the convention is a bit weird vor values that ca be arrays. It's easiest to look at an 
+example. This `yml` config:
+
+```yaml
+cloudflare:
+  api:
+    token: <your cloudflare api token>
+  zones:
+    - id: <your cloudflare zone id>
+      domains:
+        - yourdomain.com
+```
+
+Would translate to:
+
+```
+CLOUDFLARE_API_TOKEN=<your cloudflare api token>
+CLOUDFLARE_ZONES_0_ID=<your cloudflare zone id>
+CLOUDFLARE_ZONES_0_DOMAINS_0=yourdomain.com
+CLOUDFLARE_ZONES_0_DOMAINS_1=blog.yourdomain.com
+```
+
+The `0` or `1` values represent the index in the array.
 
 # Running it
 
